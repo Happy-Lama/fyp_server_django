@@ -93,12 +93,10 @@ DATABASES = {
 }
 
 if RENDER_EXTERNAL_HOSTNAME:
-    DATABASES['default'] = {
-        dj_database_url.config(
+    DATABASES['default'] = dj_database_url.config(
             default=os.environ.get("DATABASE_URL"),
             conn_max_age=600
         )
-    }
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -164,7 +162,7 @@ if not DEBUG:
     CELERY_BROKER_URL = os.environ.get('REDIS_URL')
     CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL')
     CHANNEL_LAYERS['default']['CONFIG']['hosts'] = [(os.environ.get('REDIS_URL'))]
-    
+
 from celery.schedules import crontab
 
 CELERY_BEAT_SCHEDULE = {
