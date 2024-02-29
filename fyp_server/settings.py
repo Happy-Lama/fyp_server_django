@@ -166,8 +166,12 @@ if not DEBUG:
 from celery.schedules import crontab
 
 CELERY_BEAT_SCHEDULE = {
-    'Task_One_Schedule': {
-        'task': 'api.tasks.hello_world',
-        'schedule': crontab(),
+    'Check_For_Offline_Transformers': {
+        'task': 'api.tasks.check_off_transformers',
+        'schedule': crontab(minute="*/15"),
+    },
+    'Check_For_Overloaded_Transformers': {
+        'task': 'api.tasks.check_overloaded_transformers',
+        'schedule': crontab(hour="*/1", minute=0),
     },
 }
