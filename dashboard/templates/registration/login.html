@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir='ltr'>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static '/css/style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGIN PAGE</title>
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div class='loginForm'>
+        <h1>DASHBOARD LOGIN FORM</h1>
+        <form method="post" >
+            
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class='btnLogin' type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>
