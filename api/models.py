@@ -45,7 +45,7 @@ class TransformerSpecification(models.Model):
         ('THREE', 'THREE PHASE TRANSFORMER'),
     ]
 
-    transformer_id = models.BigAutoField(primary_key=True)
+    transformer_id = models.CharField(primary_key=True, max_length=256)
     latitude = models.FloatField()
     longitude = models.FloatField()
     power_rating = models.PositiveBigIntegerField(default=100)

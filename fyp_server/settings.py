@@ -45,12 +45,16 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'dashboard.apps.DashboardConfig',
     'notifications.apps.NotificationsConfig',
+    'corsheaders',
     'rest_framework',
     'channels',
     'celery',
+    # 'webpush',
+    # 'pandas',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -147,6 +151,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Channels
 ASGI_APPLICATION = "fyp_server.asgi.application"
 CHANNEL_LAYERS = {
+    # 'default': {
+    #     'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    # },
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
@@ -179,6 +186,31 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 
-LOGIN_URL='/dashboard/login'
-LOGIN_REDIRECT_URL = '/dashboard'
-LOGOUT_REDIRECT_URL = LOGIN_URL
+# LOGIN_URL='/dashboard/login'
+# LOGIN_REDIRECT_URL = '/dashboard'
+# LOGOUT_REDIRECT_URL = LOGIN_URL
+
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3001']
+# CSRF_COOKIE_DOMAIN = 'http://localhost:8000'
+
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:3000',
+#     # Add other allowed origins if needed
+# ]
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3001',
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+
+
+# WEBPUSH_SETTINGS = {
+#     "VAPID_PUBLIC_KEY": "BAfqkyI1TUgXVAtPQ8rJ3VMvpojxnubiGhl2PuFS7FzW-BBamtNNVdSaM1m5bLP_qsKKubroThFxFEBKvldGyEM",
+#     "VAPID_PRIVATE_KEY": "nro5cMMgO4bba-s4opOdlJkCp_OZ2kpSkYczlaECcsQ",
+#     "VAPID_ADMIN_EMAIL": "kldenis2001@gmail.com",
+# }
