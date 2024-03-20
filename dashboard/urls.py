@@ -14,4 +14,5 @@ urlpatterns = [
     # path('logout/', views.logout),
     path('transformers/<int:transformer_id>/', views.get_transformer_data),
     path('notifications/<str:filter>/', views.get_notifications),
+    path('subscribe/<str:token>/', views.subscribe_to_notifications)
 ]

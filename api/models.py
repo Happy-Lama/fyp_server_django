@@ -63,6 +63,9 @@ class TransformerData(models.Model):
         ('OFF', 'Transformer Offline'),
         ('OVERLOADED', 'Transformer Overloaded'),
     ]
+
+
+    
     transformer_id = models.ForeignKey(TransformerSpecification, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
 
@@ -96,6 +99,7 @@ class TransformerData(models.Model):
     out_sb = models.FloatField(default=0)
     out_sc = models.FloatField(default=0)
 
+    # output power factor per phase
     # out_pha = models.FloatField(default=0)
     # out_phb = models.FloatField(default=0)
     # out_phc = models.FloatField(default=0)

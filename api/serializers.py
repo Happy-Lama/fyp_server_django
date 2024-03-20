@@ -84,30 +84,31 @@ class TransformerDataSerializer(serializers.ModelSerializer):
         data = TransformerData.objects.filter(timestamp__gte=startTime).order_by('timestamp').annotate(
                 rating=F('transformer_id__power_rating')
             ).values('timestamp', 'out_sa', 'out_sb', 'out_sc', 'out_ua', 'out_ub', 'out_uc', 'rating', 'out_freq')
-        
-        data_df = pd.DataFrame(list(data))
-        data_df.set_index('timestamp', inplace=True)
+        if len(data) != 0: 
+            data_df = pd.DataFrame(list(data))
+            data_df.set_index('timestamp', inplace=True)
 
-        loading_percentage = []
-        for idx, row in data_df.iterrows():
-            # print(row)
-            loading_percentage.append(self.percentage_transformer_loading(row['rating'], row['out_sa'], row['out_sb'], row['out_sc']))
+            loading_percentage = []
+            for idx, row in data_df.iterrows():
+                # print(row)
+                loading_percentage.append(self.percentage_transformer_loading(row['rating'], row['out_sa'], row['out_sb'], row['out_sc']))
 
-        data_df['loading_percentage'] = loading_percentage
-        
-        rolling_stats = data_df.rolling(window=f'{interval}min').agg({
-                'loading_percentage':['min', 'max', 'mean'], 
-                'out_ua': ['min', 'max', 'mean'],
-                'out_ub': ['min', 'max', 'mean'],
-                'out_uc': ['min', 'max', 'mean'],
-                'out_freq': ['min', 'max', 'mean'],
-            })
-        
-        # print(rolling_stats.to_dict())
-        dict_data = rolling_stats.to_dict()
-        dict_ = {str(key): {str(key1): value1 for key1, value1 in value.items()} for key, value in dict_data.items()}
-        # print(dict_)
-        return dict_
+            data_df['loading_percentage'] = loading_percentage
+            
+            rolling_stats = data_df.rolling(window=f'{interval}min').agg({
+                    'loading_percentage':['min', 'max', 'mean'], 
+                    'out_ua': ['min', 'max', 'mean'],
+                    'out_ub': ['min', 'max', 'mean'],
+                    'out_uc': ['min', 'max', 'mean'],
+                    'out_freq': ['min', 'max', 'mean'],
+                })
+            
+            # print(rolling_stats.to_dict())
+            dict_data = rolling_stats.to_dict()
+            dict_ = {str(key): {str(key1): value1 for key1, value1 in value.items()} for key, value in dict_data.items()}
+            # print(dict_)
+            return dict_
+        return {}
 
     def transformer_data(self, transformer_id):
         transformer_data = TransformerSpecification.objects.get(transformer_id=transformer_id).transformerdata_set.order_by('timestamp')

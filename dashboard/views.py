@@ -9,6 +9,7 @@ from api.models import TransformerSpecification, TransformerData
 from api.serializers import TransformerDataSerializer
 from datetime import timedelta
 from django.utils import timezone
+from firebase import subscribeUserToNotifications
 
 # from django.db.models import Max
 
@@ -27,19 +28,6 @@ def get_notifications(request, filter):
     
 def get_overall_transformer_data(request):
     # get data for the summary statistics page
-    # average percentage loading of the transformers over period of one day
-    # min loading, and its associated transformer
-    # max loading, and its associated transformer
-    # number of transformers that are off
-    # number of overloaded transformers
-    # number of on transformers
-    # number of registered transformers
-    # max output frequency, and its associated transformer
-    # min output frequency, and its associated transformer
-    # average frequency
-    # max output voltage, and its associated transformer
-    # min output voltage and its associated transformer
-    # average output voltage
     results = TransformerDataSerializer().get_overall_data()
 
     return JsonResponse({'overall_stats': results}, status=200)
@@ -49,12 +37,13 @@ def moving_time_average_data(request):
     # this is the overall transformer data but in time windows
     # watching the min, average and max loading over time period of 1 week
     # more data to be considered
-    startTime = timezone.now() - timedelta(days=7) #adjust for new timeframes
+    startTime = timezone.now() - timedelta(days=21) #adjust for new timeframes
     interval = 60
     results = TransformerDataSerializer().moving_average(startTime, interval)
 
     return JsonResponse({'data': results}, status=200)
 
+@csrf_exempt
 def register_transformer(request):
     # register new transformer specifications
     if request.method == 'POST':
@@ -78,3 +67,8 @@ def get_transformer_data(request, transformer_id):
     data = TransformerDataSerializer().transformer_data(transformer_id)
     return JsonResponse({'data': data}, status=200)
     # pass
+
+
+def subscribe_to_notifications(request, token):
+    response = subscribeUserToNotifications(token)
+    return JsonResponse({"successful": response}, status=200)
