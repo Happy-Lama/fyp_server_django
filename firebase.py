@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import messaging
 
-cred = credentials.Certificate("fyppush-f9a64-firebase-adminsdk-izo04-fd9728169d.json")
+cred = credentials.Certificate("firebase-credentials.json")
 firebase_admin.initialize_app(cred)
 
 
