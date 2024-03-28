@@ -201,6 +201,7 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:3001']
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3001',
+    'https://transformer-web-dashboard.onrender.com',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
