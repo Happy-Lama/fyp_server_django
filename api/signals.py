@@ -12,7 +12,7 @@ def create_notification(sender, instance, created, **kwargs):
         # Create a notification (danger level) if the transformer has gone offline
         # Broadcast new data to the users via a websocket
         print("TransformerData Saved")
-        TransformerDataManager().check_thresholds(instance)
+        TransformerDataManager().check_thresholds(instance, Notification)
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)('users', {'type': 'send_notification', 'message': 'new_transformer_data'})
         
