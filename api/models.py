@@ -38,7 +38,7 @@ class TransformerDataManager(models.Manager):
     def check_thresholds(self, transformer_data_instance, notification_class):
 
         transformer_spec = transformer_data_instance.transformer_id
-
+        print(notification_class)
         # Check loading threshold
         loading_threshold = transformer_spec.power_rating * 0.9  # Example threshold: 80% of power rating
         total_power = transformer_data_instance.out_pa + transformer_data_instance.out_pb + transformer_data_instance.out_pc
@@ -48,8 +48,8 @@ class TransformerDataManager(models.Manager):
 
         # Check phase voltage threshold
         phase_voltage_threshold = 240  # Example threshold: 240V
-        if not ((phase_voltage_threshold * 0.94 <= transformer_data_instance.out_ua <= phase_voltage_threshold * 1.06) or
-                (phase_voltage_threshold * 0.94 <= transformer_data_instance.out_ub <= phase_voltage_threshold * 1.06) or
+        if not ((phase_voltage_threshold * 0.94 <= transformer_data_instance.out_ua <= phase_voltage_threshold * 1.06) and
+                (phase_voltage_threshold * 0.94 <= transformer_data_instance.out_ub <= phase_voltage_threshold * 1.06) and
                 (phase_voltage_threshold * 0.94 <= transformer_data_instance.out_uc <= phase_voltage_threshold * 1.06)):
             message = f"Transformer {transformer_spec.transformer_id} exceeded phase voltage threshold."
             self.create_notification(transformer_spec, message, 'WARN', notification_class)
