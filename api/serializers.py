@@ -27,7 +27,8 @@ class TransformerDataSerializer(serializers.ModelSerializer):
         transformers_with_latest_data = []
         transformers = TransformerSpecification.objects.all()
         for transformer_spec in transformers:
-            latest_data = transformer_spec.transformerdata_set.order_by('-timestamp').first()
+            latest_data = transformer_spec.transformerdata_set.order_by('-timestamp')[0]
+            print(type(latest_data))
             transformer = TransformerSpecificationsSerializer(transformer_spec)
             transformer_data = transformer.data
             transformer_data['percentage_loading'] = self.percentage_transformer_loading(transformer_data['power_rating'], latest_data.out_sa, latest_data.out_sb, latest_data.out_sc)
