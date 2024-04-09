@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta
-from notifications import Notification
+from notifications.models import Notification
 # model managers
 
 class TransformerDataManager(models.Manager):
@@ -36,7 +36,7 @@ class TransformerDataManager(models.Manager):
         return selected_transformers
     
     def check_thresholds(self, transformer_data_instance):
-        
+
         transformer_spec = transformer_data_instance.transformer_id
 
         # Check loading threshold
