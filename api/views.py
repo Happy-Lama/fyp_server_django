@@ -121,7 +121,9 @@ def ttn_receive_data(request):
 
                 decoded_payload = uplink_message.get('decoded_payload', None)
                 print("Decoded Payload",decoded_payload)
+                decoded_payload = decoded_payload.get('decoded_payload', None)
                 if decoded_payload:
+                    
                     # print(decoded_payload)   
                     # check if the devEUI exists
                     # transformer = TransformerSpecification.objects.get(transformer_id=devUID)
