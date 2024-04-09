@@ -42,9 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'notifications.apps.NotificationsConfig',
     'api.apps.ApiConfig',
     'dashboard.apps.DashboardConfig',
-    'notifications.apps.NotificationsConfig',
+    
     'corsheaders',
     'rest_framework',
     'channels',
