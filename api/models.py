@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta
-from notifications.models import Notification
+# from notifications.models import Notification
 # model managers
 
 class TransformerDataManager(models.Manager):
@@ -35,7 +35,7 @@ class TransformerDataManager(models.Manager):
 
         return selected_transformers
     
-    def check_thresholds(self, transformer_data_instance):
+    def check_thresholds(self, transformer_data_instance, notification_class):
 
         transformer_spec = transformer_data_instance.transformer_id
 
@@ -44,7 +44,7 @@ class TransformerDataManager(models.Manager):
         total_power = transformer_data_instance.out_pa + transformer_data_instance.out_pb + transformer_data_instance.out_pc
         if total_power > loading_threshold:
             message = f"Transformer {transformer_spec.transformer_id} exceeded loading threshold."
-            self.create_notification(transformer_spec, message, 'DANGER')
+            self.create_notification(transformer_spec, message, 'DANGER', notification_class)
 
         # Check phase voltage threshold
         phase_voltage_threshold = 240  # Example threshold: 240V
@@ -52,16 +52,16 @@ class TransformerDataManager(models.Manager):
                 (phase_voltage_threshold * 0.94 <= transformer_data_instance.out_ub <= phase_voltage_threshold * 1.06) or
                 (phase_voltage_threshold * 0.94 <= transformer_data_instance.out_uc <= phase_voltage_threshold * 1.06)):
             message = f"Transformer {transformer_spec.transformer_id} exceeded phase voltage threshold."
-            self.create_notification(transformer_spec, message, 'WARN')
+            self.create_notification(transformer_spec, message, 'WARN', notification_class)
 
         # Check frequency threshold
         frequency_threshold = 50  # Example threshold: 50Hz
         if not (frequency_threshold - 0.5 <= transformer_data_instance.out_freq <= frequency_threshold + 0.5):
             message = f"Transformer {transformer_spec.transformer_id} frequency is not within threshold."
-            self.create_notification(transformer_spec, message, 'WARN')
+            self.create_notification(transformer_spec, message, 'WARN', notification_class)
 
-    def create_notification(self, transformer_spec, message, notification_type):
-        Notification.objects.create(
+    def create_notification(self, transformer_spec, message, notification_type, notification_class):
+        notification_class.objects.create(
             transformer_id=transformer_spec,
             message=message,
             notification_type=notification_type
