@@ -107,18 +107,17 @@ def ttn_receive_data(request):
             return
         devUID = end_device_ids.get('dev_eui', None)
         print(data)
-        print(type(data))
-
+        print(devUID)
         if devUID:
             transformer = TransformerSpecification.objects.get(transformer_id=devUID)
-            
+            print(transformer)
             if transformer != None:
                 decoded_payload = data.get('decoded_payload', None)
 
                 if decoded_payload:
                     print(decoded_payload)   
                     # check if the devEUI exists
-                    transformer = TransformerSpecification.objects.get(transformer_id=devUID)
+                    # transformer = TransformerSpecification.objects.get(transformer_id=devUID)
 
                     if transformer:
                         transformer_instance = TransformerData(
@@ -165,7 +164,7 @@ def ttn_receive_data(request):
 
                             status = 'ON' if decoded_payload['status'] == 1 else 'OFF'
                         )
-
+                        print(transformer_instance)
                         if transformer_instance.status == 'ON':
                             overloaded = TransformerDataSerializer().percentage_transformer_loading(transformer.power_rating, transformer_instance.out_sa, transformer_instance.out_sb, transformer_instance.out_sc) >= 0.9
 
@@ -173,6 +172,5 @@ def ttn_receive_data(request):
                                 transformer_instance.status = 'OVERLOADED'
                         
                         transformer_instance.save()
-
-        return HttpResponse(status=200)
+                        return HttpResponse(status=200)
     return HttpResponse(status=405)

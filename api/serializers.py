@@ -28,7 +28,7 @@ class TransformerDataSerializer(serializers.ModelSerializer):
         transformers = TransformerSpecification.objects.all()
         print(transformers)
         for transformer_spec in transformers:
-            latest_data = transformer_spec.transformerdata_set.order_by('-timestamp')[0]
+            latest_data = transformer_spec.transformerdata_set.order_by('-timestamp').first()
             print(latest_data)
             print(type(latest_data))
             transformer = TransformerSpecificationsSerializer(transformer_spec)
