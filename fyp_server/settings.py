@@ -192,7 +192,7 @@ CELERY_BEAT_SCHEDULE = {
 # LOGOUT_REDIRECT_URL = LOGIN_URL
 
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3001']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3001', 'https://fyp-server-django.onrender.com']
 # CSRF_COOKIE_DOMAIN = 'http://localhost:8000'
 
 # CORS_ALLOWED_ORIGINS = [
