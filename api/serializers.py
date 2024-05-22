@@ -4,6 +4,7 @@ from django.db.models import Max, Avg, Min, F
 from django.utils import timezone
 import pandas as pd
 from django.db.models import Func, FloatField
+from django.core.paginator import Paginator
 
 class TransformerSpecificationsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -122,6 +123,9 @@ class TransformerDataSerializer(serializers.ModelSerializer):
         return {}
 
     def transformer_data(self, transformer_id):
-        transformer_data = TransformerSpecification.objects.get(transformer_id=transformer_id).transformerdata_set.order_by('timestamp')[-100:]
-        return self.__class__(transformer_data, many=True).data
+        transformer_data = TransformerSpecification.objects.get(transformer_id=transformer_id).transformerdata_set.order_by('timestamp')
+        paginator = Paginator(transformer_data, 100)
+        last_page = paginator.page(paginator.num_pages)
+
+        return self.__class__(last_page.object_list, many=True).data
 
