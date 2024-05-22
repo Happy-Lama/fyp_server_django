@@ -12,7 +12,7 @@ urlpatterns = [
     # path('get_csrf_token/', views.get_csrf_toke),
     # path('login/', views.login),
     # path('logout/', views.logout),
-    path('transformers/<int:transformer_id>/', views.get_transformer_data),
+    path('transformers/<str:transformer_id>/', views.get_transformer_data),
     path('notifications/<str:filter>/', views.get_notifications),
     path('subscribe/<str:token>/', views.subscribe_to_notifications)
 ]
